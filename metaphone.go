@@ -8,25 +8,21 @@ or name; rather, the output is an intentionally approximate phonetic
 representation. The approximate encoding is necessary to account for the way
 speakers vary their pronunciations and misspell or otherwise vary words and
 names they are trying to spell.
-
 The Double Metaphone phonetic encoding algorithm is the second generation of
 the Metaphone algorithm. Its implementation was described in the June 2000
 issue of C/C++ Users Journal. It makes a number of fundamental design
 improvements over the original Metaphone algorithm.
-
 It is called "Double" because it can return both a primary and a secondary code
 for a string; this accounts for some ambiguous cases as well as for multiple
 variants of surnames with common ancestry. For example, encoding the name
 "Smith" yields a primary code of SM0 and a secondary code of XMT, while the
 name "Schmidt" yields a primary code of XMT and a secondary code of SMT--both
 have XMT in common.
-
 Double Metaphone tries to account for myriad irregularities in English of
 Slavic, Germanic, Celtic, Greek, French, Italian, Spanish, Chinese, and other
 origin. Thus it uses a much more complex ruleset for coding than its
 predecessor; for example, it tests for approximately 100 different contexts of
 the use of the letter C alone.
-
 This script implements the Double Metaphone algorithm (c) 1998, 1999 originally
 implemented by Lawrence Philips in C++. It was further modified in C++ by Kevin
 Atkinson (http {//aspell.net/metaphone/). It was translated to C by Maurice
@@ -35,7 +31,6 @@ created by Andrew Collins on January 12, 2007, using the C source
 (http {//www.atomodo.com/code/double-metaphone/metaphone.py/view). It was also
 translated to Go by Adele Dewey-Lopez <adele@seed.co> using Atkinson's C++ source,
 with some further revisions.
-
   Updated 2007-02-14 - Found a typo in the 'gh' section (0.1.1)
   Updated 2007-12-17 - Bugs fixed in 'S', 'Z', and 'J' sections (0.2;
                        Chris Leong)
@@ -56,17 +51,6 @@ type phoneticData struct {
 	isSlavoGermanic bool
 	metaphone1      string
 	metaphone2      string
-}
-
-silent_starters := []string{"gn", "kn", "pn", "wr", "ps"}
-
-func (p *phoneticData) contains(str string) bool {
-   for _, val := range silent_starters {
-      if val == str {
-         return true
-      }
-   }
-   return false
 }
 
 func (p *phoneticData) beginsWith(matches ...string) bool {
@@ -627,18 +611,6 @@ func (p *phoneticData) z() {
 	}
 }
 
-// func check_word_start(self){
-//         # skip these silent letters when at start of word
-//         if self.word.get_letters(0, 2) in SILENT_STARTERS:
-//             self.position += 1
-//         # Initial 'X' is pronounced 'Z' e.g. 'Xavier'
-//         if self.word.get_letters(0) == 'X':
-//             # 'Z' maps to 'S'
-//             self.primary_phone = self.secondary_phone = 'S'
-//             self.position += 1
-// }
-
-
 func DoubleMetaphone(s string) (string, string) {
 	// initialize
 	var p *phoneticData
@@ -651,7 +623,6 @@ func DoubleMetaphone(s string) (string, string) {
 	if p.containsAny("w", "k", "cz", "witz") {
 		p.isSlavoGermanic = true
 	}
-	if 
 
 	for i, next := range p.word {
 		if p.cur == i {
